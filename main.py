@@ -71,17 +71,28 @@ def graficodesempleo():
 def histogramasalarios():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = tempList2.Salario
-    plt.hist(salarios)
-    plt.title(f"Histograma de salarios")
+    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    salarios = tempList3.Salario
+    
+    salarios1 = salarios.loc[salarios < 300000]
+    salarios2 = salarios.loc[salarios >= 300000]
+
+    fig, (ax1, ax2) = plt.subplots(1, 2)
+    fig.suptitle('Histograma de salarios')
+    ax1.hist(salarios1)
+    ax1.set_title(f"Menores a $300000")
+    
+    ax2.hist(salarios2)
+    ax2.set_title(f"Mayores a $300000")
     plt.show()
     return
 
 def boxplotsalarios():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = tempList2.Salario
-    plt.boxplot(salarios)
+    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    salarios = tempList3.Salario
+    plt.boxplot(salarios, whis=20)
     plt.title(f"Boxplot de salarios")
     plt.show()
     return
@@ -89,7 +100,9 @@ def boxplotsalarios():
 def mediamedianamoda():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = tempList2.Salario
+    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    salarios = tempList3.Salario
+    
     media = salarios.mean()
     mediana = statistics.median(salarios)
     moda = statistics.mode(salarios)
@@ -102,7 +115,8 @@ def mediamedianamoda():
 def minimomaximocuartiles():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = tempList2.Salario
+    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    salarios = tempList3.Salario
     minimo = np.min(salarios)
     maximo = np.max(salarios)
     q1 = np.percentile(salarios, 25)
@@ -119,32 +133,34 @@ def minimomaximocuartiles():
 
 def boxplotporgenero():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
-    salarios = tempList1.loc[tempList1['PEA'] == 1]
+    salariosTemp = tempList1.loc[tempList1['PEA'] == 1]
+    salarios = salariosTemp.loc[salariosTemp['Salario'] > 0]
     mujeres = salarios.loc[salarios['Sexo'] == 2]
     hombres = salarios.loc[salarios['Sexo'] == 1]
     
     fig, (ax1, ax2) = plt.subplots(1, 2)
     fig.suptitle('Salarios diferenciados por género')
-    ax1.boxplot(mujeres.Salario)
+    ax1.boxplot(mujeres.Salario, whis=20)
     ax1.set_title(f"Salario mujeres")
     
-    ax2.boxplot(hombres.Salario)
+    ax2.boxplot(hombres.Salario, whis=20)
     ax2.set_title(f"Salario hombres")
     plt.show()
     return
 
 def boxplotporzona():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
-    salarios = tempList1.loc[tempList1['PEA'] == 1]
+    salariosTemp = tempList1.loc[tempList1['PEA'] == 1]
+    salarios = salariosTemp.loc[salariosTemp['Salario'] > 0]
     interior = salarios.loc[salarios['region'] != 1]
     montevideo = salarios.loc[salarios['region'] == 1]
     
     fig, (ax1, ax2) = plt.subplots(1, 2)
     fig.suptitle('Salarios diferenciados por zona geográfica')
-    ax1.boxplot(interior.Salario)
+    ax1.boxplot(interior.Salario, whis=20)
     ax1.set_title(f"Salario interior")
     
-    ax2.boxplot(montevideo.Salario)
+    ax2.boxplot(montevideo.Salario, whis=20)
     ax2.set_title(f"Salario montevideo")
     plt.show()
     return
