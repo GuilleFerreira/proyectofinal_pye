@@ -261,8 +261,8 @@ def intervalo_confianza():
 # boxplotporgenero()
 # boxplotporzona()
 
-imprimir_cantidad_desempleados()
-intervalo_confianza()
+# imprimir_cantidad_desempleados()
+# intervalo_confianza()
 
 pruebaHipotesis1()
 # pruebaHipotesis2()
