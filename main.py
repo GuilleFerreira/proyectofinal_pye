@@ -1,6 +1,8 @@
 import pandas as pd
 import statistics
 import numpy as np
+#import csv
+import math
 import scipy.stats as stats
 from matplotlib import pyplot as plt
 
@@ -72,7 +74,7 @@ def graficodesempleo():
 def histogramasalarios():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    tempList3 = tempList2.loc[tempList2['Salario'] > 49]
     salarios = tempList3.Salario
     
     salarios1 = salarios.loc[salarios < 300000]
@@ -91,7 +93,7 @@ def histogramasalarios():
 def boxplotsalarios():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    tempList3 = tempList2.loc[tempList2['Salario'] > 49]
     salarios = tempList3.Salario
     plt.boxplot(salarios, whis=20)
     plt.title(f"Boxplot de salarios")
@@ -101,7 +103,7 @@ def boxplotsalarios():
 def mediamedianamoda():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    tempList3 = tempList2.loc[tempList2['Salario'] > 49]
     salarios = tempList3.Salario
     
     media = salarios.mean()
@@ -116,7 +118,7 @@ def mediamedianamoda():
 def minimomaximocuartiles():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     tempList2 = tempList1.loc[tempList1['PEA'] == 1]
-    tempList3 = tempList2.loc[tempList2['Salario'] > 0]
+    tempList3 = tempList2.loc[tempList2['Salario'] > 49]
     salarios = tempList3.Salario
     minimo = np.min(salarios)
     maximo = np.max(salarios)
@@ -135,7 +137,7 @@ def minimomaximocuartiles():
 def boxplotporgenero():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     salariosTemp = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = salariosTemp.loc[salariosTemp['Salario'] > 0]
+    salarios = salariosTemp.loc[salariosTemp['Salario'] > 49]
     mujeres = salarios.loc[salarios['Sexo'] == 2]
     hombres = salarios.loc[salarios['Sexo'] == 1]
     
@@ -152,7 +154,7 @@ def boxplotporgenero():
 def boxplotporzona():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     salariosTemp = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = salariosTemp.loc[salariosTemp['Salario'] > 0]
+    salarios = salariosTemp.loc[salariosTemp['Salario'] > 49]
     interior = salarios.loc[salarios['region'] != 1]
     montevideo = salarios.loc[salarios['region'] == 1]
     
@@ -166,6 +168,9 @@ def boxplotporzona():
     plt.show()
     return
 
+# =================================================
+# Pruebas de hipótesis (Parte 3)
+# =================================================
 
 def pruebaHipotesis1():
     desempleados = encuesta.loc[encuesta['Desempleo'] == 1]
@@ -187,7 +192,7 @@ def pruebaHipotesis1():
 def pruebaHipotesis2():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
     salariosTemp = tempList1.loc[tempList1['PEA'] == 1]
-    salarios = salariosTemp.loc[salariosTemp['Salario'] > 0]
+    salarios = salariosTemp.loc[salariosTemp['Salario'] > 49]
     mujeres = salarios.loc[salarios['Sexo'] == 2]
     hombres = salarios.loc[salarios['Sexo'] == 1]
     
@@ -205,6 +210,36 @@ def pruebaHipotesis2():
 
     return
 
+
+# ===========================================================
+# Parte 2
+# ===========================================================
+def contar_valores_desempleo():
+    desempleo = encuesta.loc[encuesta['Desempleo'] == 1]
+    desempleototal = desempleo.ID.count()
+    return desempleototal
+
+def contar_valores_pea():
+    pea = encuesta.loc[encuesta['PEA'] == 1]
+    peatotal = pea.ID.count()
+    return peatotal
+
+def TDesempleo():
+    return contar_valores_desempleo() / contar_valores_pea()
+
+def cantidad_desempleados():
+    tdesempleo = TDesempleo()
+    cantidad_desempleados = math.floor(tdesempleo * 1757161)
+    return cantidad_desempleados
+
+def imprimir_cantidad_desempleados():
+    print(f"La cantidad de desempleados es: {cantidad_desempleados()}")
+    return
+
+def intervalo_confianza():
+    print(f"Intervalo de confianza: {stats.norm.interval(0.95, loc=cantidad_desempleados())}")
+    return
+
 # ===========================================================
 #                        MAIN PROGRAM
 # ===========================================================
@@ -217,6 +252,9 @@ mediamedianamoda()
 minimomaximocuartiles()
 boxplotporgenero()
 boxplotporzona()
+
+imprimir_cantidad_desempleados()
+intervalo_confianza()
 
 pruebaHipotesis1()
 pruebaHipotesis2()
