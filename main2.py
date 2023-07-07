@@ -51,3 +51,4 @@ def pruebaHipotesis2():
 
 
 pruebaHipotesis1()
+pruebaHipotesis2()
