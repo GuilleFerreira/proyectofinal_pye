@@ -236,8 +236,14 @@ def imprimir_cantidad_desempleados():
     print(f"La cantidad de desempleados es: {cantidad_desempleados()}")
     return
 
+def calcular_error_estandar():
+    varianzaTasaDesempleo = TDesempleo() * (1 - TDesempleo())
+    desvioEstandarMuestra = math.sqrt(varianzaTasaDesempleo / contar_valores_pea())
+    desvioEstandarDesempleo = 1757161 * desvioEstandarMuestra
+    return desvioEstandarDesempleo
+
 def intervalo_confianza():
-    print(f"Intervalo de confianza: {stats.norm.interval(0.95, loc=cantidad_desempleados())}")
+    print(f"Intervalo de confianza: {stats.norm.interval(0.95, loc=cantidad_desempleados(), scale=calcular_error_estandar())}")
     return
 
 # ===========================================================
