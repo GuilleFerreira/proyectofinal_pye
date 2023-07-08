@@ -179,15 +179,23 @@ def pruebaHipotesis1():
     cantpea = pea.ID.count()
     tasadesempleo2022 = cantdes / cantpea
 
-    # Prueba de hipótesis de una muestra
+    # Prueba de hipótesis de una muestra (dos colas)
     tasaDesempleo2021 = 0.07  # Tasa de desempleo en 2021 (hipótesis nula)
 
-    if tasadesempleo2022 < tasaDesempleo2021:
-        print("Se rechaza la hipótesis nula.")
+    # Realizar la prueba estadística (t-test) para una muestra (dos colas)
+    t_statistic, p_value = stats.ttest_1samp([tasadesempleo2022], tasaDesempleo2021)
+
+    # Definir el nivel de significancia
+    nivel_significancia = 0.05
+
+    # Comparar el valor p con el nivel de significancia
+    if p_value < nivel_significancia:
+        print("Se rechaza la hipótesis nula, la tasa de desempleo en 2022 es diferente de la tasa de desempleo en 2021.")
     else:
-        print("No se rechaza la hipótesis nula.")
+        print("No se rechaza la hipótesis nula, no hay evidencia suficiente para afirmar que la tasa de desempleo en 2022 es diferente de la tasa de desempleo en 2021.")
 
     return
+
 
 def pruebaHipotesis2():
     tempList1 = encuesta.loc[encuesta['Desempleo'] == 0]
@@ -236,6 +244,7 @@ def imprimir_cantidad_desempleados():
     print(f"La cantidad de desempleados es: {cantidad_desempleados()}")
     return
 
+
 def calcular_error_estandar():
     varianzaTasaDesempleo = TDesempleo() * (1 - TDesempleo())
     desvioEstandarMuestra = math.sqrt(varianzaTasaDesempleo / contar_valores_pea())
@@ -249,6 +258,7 @@ def intervalo_confianza():
 # ===========================================================
 #                        MAIN PROGRAM
 # ===========================================================
+
 
 calculardesempleo()
 graficodesempleo()
